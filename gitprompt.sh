@@ -20,15 +20,17 @@ function git_prompt_config()
   # Bold
   local BoldGreen="\[\033[1;32m\]"    # Green
   local BoldBlue="\[\033[1;34m\]"     # Blue
+  local BoldRed="\[\033[1;31m\]"
 
   # High Intensty
   local IntenseBlack="\[\033[0;90m\]" # Grey
 
   # Bold High Intensty
-  local Magenta="\[\033[1;95m\]"      # Purple
+  local Magenta="\[\033[0;95m\]"      # Purple
 
   # Regular Colors
   local Yellow="\[\033[0;33m\]"
+  local Green="\[\033[0;32m\]"
   local White='\[\033[37m\]'
   local Red="\[\033[0;31m\]"
   Blue="\[\033[0;34m\]"
@@ -49,16 +51,22 @@ function git_prompt_config()
   local Time12a="\$(date +%H:%M)"
   # local Time12a="(\$(date +%H:%M:%S))"
   # local Time12a="(\@))"
-  local PathShort="\w"
+
+ if [ $UID -eq 0 ] ; then
+  local User="${BoldRed}\u${ResetColor}@${Red}\h${ResetColor}"
+ else
+  local User="${BoldBlue}\u${ResetColor}@${Blue}\h${ResetColor}"
+ fi
+  local PathShort="${User}:${Green}\w${ResetColor}"
 
   if [ "x${GIT_PROMPT_START}" == "x" ]; then
-    PROMPT_START="${Yellow}${PathShort}${ResetColor}"
+    PROMPT_START="${PathShort}"
   else
     PROMPT_START="${GIT_PROMPT_START}"
   fi
 
   if [ "x${GIT_PROMPT_END}" == "x" ]; then
-    PROMPT_END=" \n${White}${Time12a}${ResetColor} $ "
+    PROMPT_END="${ResetColor} \$ "
   else
     PROMPT_END="${GIT_PROMPT_END}"
   fi
