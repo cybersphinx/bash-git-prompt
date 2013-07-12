@@ -65,8 +65,6 @@ function git_prompt_config()
 
   EMPTY_PROMPT="${PROMPT_START}${PROMPT_END}"
 
-  # fetch remote revisions every other $GIT_PROMPT_FETCH_TIMEOUT (default 5) minutes
-  GIT_PROMPT_FETCH_TIMEOUT=${1-5}
   if [ "x$__GIT_STATUS_CMD" == "x" ]
   then
     __GIT_STATUS_CMD="${__GIT_PROMPT_DIR:-${HOME}/.bash}/gitstatus.py"
@@ -99,13 +97,6 @@ function setGitPrompt() {
 	if [[ ! -e "${repo}" ]]; then
         PS1="${EMPTY_PROMPT}"
         return
-	fi
-
-	local FETCH_HEAD="${repo}/.git/FETCH_HEAD"
-	# Fech repo if local is stale for more than $GIT_FETCH_TIMEOUT minutes
-	if [[ ! -e "${FETCH_HEAD}"  ||  -e `find ${FETCH_HEAD} -mmin +${GIT_PROMPT_FETCH_TIMEOUT}` ]]
-	then
-        git fetch --quiet
 	fi
 
   local -a GitStatus
